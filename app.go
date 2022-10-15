@@ -3,12 +3,13 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"net/http"
 
 	_ "github.com/lib/pq"
 )
 
 const (
-	host     = "localhost"
+	host     = "local-db"
 	port     = 5432
 	user     = "test"
 	password = "testtset"
@@ -18,6 +19,14 @@ const (
 func main() {
 	fmt.Println("test")
 	connectDB()
+
+	http.HandleFunc("/ping", ping)
+
+	http.ListenAndServe(":8080", nil)
+}
+
+func ping(w http.ResponseWriter, req *http.Request) {
+	fmt.Println("pong")
 }
 
 func connectDB() {
